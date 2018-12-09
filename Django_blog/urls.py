@@ -19,6 +19,6 @@ from . import views
 
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
-    re_path(r'^article/', include('article.urls')),
+    re_path(r'^blog/', include('blog.urls')),
     path('', views.index, name='index'),
 ]
