@@ -1,20 +1,11 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% extends 'base.html' %}
+
+{% block title %}
     <title>我的博客</title>
-</head>
-<body>
-    <div>
-        <a href="{% url 'home' %}">
-            <h3>我的博客</h3>
-        </a>
-    </div>
+{% endblock %}
+
+{% block content %}
     {% for blog in blogs %}
-        <hr>
         <a href="{% url 'blog:blog_detail' blog.pk %}">
             <h3>{{ blog.title }}</h3>
         </a>
@@ -26,9 +17,9 @@
             </a>
         </p>
         <p>{{ blog.content|truncatewords:30 }}</p>
+        <hr>
     {% empty %}
         <p>-- 暂无博客 --</p>
     {% endfor %}
     <p>一共有{{ blogs|length }}篇博客</p>
-</body>
-</html>
+{% endblock %}
