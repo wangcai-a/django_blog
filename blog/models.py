@@ -9,7 +9,7 @@ class BlogType(models.Model):
     type_name = models.CharField(max_length=15)
 
     def __str__(self):
-        return "<Article: %s>" % self.type_name
+        return "%s" % self.type_name
 
 
 # 博文模型
@@ -23,4 +23,4 @@ class Blog(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return "<Article: %s>" % self.title
+        return "%s" % self.title

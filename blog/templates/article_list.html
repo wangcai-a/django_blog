@@ -1,7 +1,0 @@
-<html>
-<body>
-    {% for article in articles %}
-        <a href="{% url 'article:article_detail' article.pk %}">{{ article.title }}</a>
-    {% endfor %}
-</body>
-</html>
