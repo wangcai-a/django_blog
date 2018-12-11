@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
+import markdown
 
 # Create your views here.
 from django.http import HttpResponse, Http404
@@ -14,6 +15,12 @@ def blog_list(request):
 
 def blog_detail(request, blog_id):
     article = get_object_or_404(Blog, pk=blog_id)
+    article.content = markdown.markdown(article.content,
+                                  extensions=[
+                                      'markdown.extensions.extra',
+                                      'markdown.extensions.codehilite',
+                                      'markdown.extensions.toc',
+                                  ])
     context = {
         'blog': article
     }
