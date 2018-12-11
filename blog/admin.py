@@ -12,4 +12,3 @@ class BlogType(admin.ModelAdmin):
 class BlogArticleAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "author", "is_deleted", "content", "created_time", "last_updated_time")
     ordering = ("id",)
-

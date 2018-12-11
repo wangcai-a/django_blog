@@ -21,4 +21,5 @@ urlpatterns = [
     path('', blog_list, name='home'),
     re_path(r'^admin/', admin.site.urls),
     re_path(r'^blog/', include('blog.urls')),
+    path('user/', include('user.urls')),
 ]
