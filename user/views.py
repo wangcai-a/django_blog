@@ -5,7 +5,11 @@ from .forms import RegisterForm
 
 
 def register(request):
-    print(request.method)
+    # 从get或者post请求中获取next参数值
+    # get 请求中，next 通过 url 传递，即 /?next=value
+    # post 请求中，next 通过表单传递，即 <input type="hidden" name="next" value="{{ next }}"/>
+    redirect_to = request.POST.get('next', request.GET.get('next', ''))
+
     # 请求为post的时候,才表示用户提交了数据
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -20,4 +24,4 @@ def register(request):
     # 渲染模板
     # 如果用户正在访问页面,则渲染一个空的表单
     # 如果提交一个不合法的信息,则渲染带有错误信息的表单
-    return render(request, 'register.html', context={'form': form})
+    return render(request, 'register.html', context={'form': form, 'next':redirect_to})
