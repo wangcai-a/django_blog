@@ -1,5 +1,6 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 
 def home(request):
-    return render_to_response('home.html', context={})
+    # 这里必须使用render不能用render_to_response,否则不能在模板中使用request的属性,比如session等
+    return render(request, 'home.html')
