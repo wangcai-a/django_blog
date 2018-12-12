@@ -6,7 +6,7 @@
 
 {% block content %}
     {% for blog in blogs %}
-        <a href="{% url 'blog:blog_detail' blog.pk %}">
+        <a href="{%  url 'blog:blog_detail'  blog.pk %}">
             <h3>{{ blog.title }}</h3>
         </a>
         <p>作者:{{ blog.author }}</p>

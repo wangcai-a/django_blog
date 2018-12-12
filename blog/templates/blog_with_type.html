@@ -8,7 +8,7 @@
     <h3>{{ blog_type.type_name }}</h3>
     {% for blog in blogs %}
         <hr>
-        <a href="{% url 'blog:blog_detail' blog.pk %}">
+        <a href="{{ url('blog:blog_detail', blog.pk) }}">
             <h3>{{ blog.title }}</h3>
         </a>
         <p>作者:{{ blog.author }}</p>
