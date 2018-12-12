@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404
 import markdown
 
 # Create your views here.
@@ -10,7 +10,7 @@ def blog_list(request):
     context = {}
     context['blogs'] = Blog.objects.filter(is_deleted=False)
     context['blogs_count'] = Blog.objects.filter(is_deleted=False).count()
-    return render_to_response('blog_list.html', context)
+    return render(request ,'blog_list.html', context)
 
 
 def blog_detail(request, blog_id):
@@ -32,4 +32,4 @@ def blog_with_type(request, blog_type_id):
     blog_type = get_object_or_404(BlogType, id=blog_type_id)
     context['blogs'] = Blog.objects.filter(blog_type=blog_type)
     context['blog_type'] = blog_type
-    return render_to_response('blog_with_type.html', context)
+    return render(request ,'blog_with_type.html', context)
