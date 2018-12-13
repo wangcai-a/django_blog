@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -5,22 +6,25 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}">
     <title>注册</title>
 </head>
 <body>
-    <h3>注册</h3>
-    <form class="form" action="{% url 'user:register' %}" method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        {% for field in form %}
+    <div class="container">
+        <form action="{% url 'user:register' %}" class="form-signin" method="post">
+            <h2 class="from-signin-heading">注册</h2>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
             {{ field.label_tag }}
             {{ field }}
             {{ field.errors }}
-            {% if field.help_text %}
-            <p class="help text-small text-muted">{{ field.help_text|safe }}</p>
-            {% endif %}
-        {% endfor %}
+                {% if field.help_text %}
+                    <p class="help text-small text-muted">{{ field.help_text|safe }}</p>
+                {% endif %}
+            {% endfor %}
         <button type="submit" class="btn btn-primary btn-block">注册</button>
-    </form>
+        </form>
+    </div>
 </body>
 </html>
