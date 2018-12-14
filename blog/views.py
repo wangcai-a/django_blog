@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+from markdown.extensions.toc import TocExtension
+from django.utils.text import slugify
 import markdown
 
 # Create your views here.
@@ -15,15 +17,19 @@ def blog_list(request):
 
 
 def blog_detail(request, blog_id):
+    md = markdown.Markdown(extensions=[
+                                     'markdown.extensions.extra',
+                                     'markdown.extensions.codehilite',
+                                     'markdown.extensions.toc',
+                                     TocExtension(slugify=slugify)
+                                        ])
     article = get_object_or_404(Blog, pk=blog_id)
-    article.content = markdown.markdown(article.content,
-                                  extensions=[
-                                      'markdown.extensions.extra',
-                                      'markdown.extensions.codehilite',
-                                      'markdown.extensions.toc',
-                                  ])
+
+    article.content = md.convert(article.content)
+
     context = {
         'blog': article,
+        'blog_toc': md.toc,
         'blog_types': BlogType.objects.all()
     }
     return render(request, 'blog_detail.html', context)

@@ -1,9 +1,16 @@
 ul.blog-types{
     list-style-type: none;
+    padding-left: 20px;
 }
 
 div.blog{
     margin-top: 0.5em;
     margin-bottom: 2em;
-    border-bottom: #c0c0c0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #e0e0e0;
+}
+
+div.blog div.toc{
+    display: none;
 }
