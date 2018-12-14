@@ -10,6 +10,7 @@ def blog_list(request):
     context = {}
     context['blogs'] = Blog.objects.filter(is_deleted=False)
     context['blogs_count'] = Blog.objects.filter(is_deleted=False).count()
+    context['blog_types'] = BlogType.objects.all()
     return render(request ,'blog_list.html', context)
 
 
@@ -22,7 +23,8 @@ def blog_detail(request, blog_id):
                                       'markdown.extensions.toc',
                                   ])
     context = {
-        'blog': article
+        'blog': article,
+        'blog_types': BlogType.objects.all()
     }
     return render(request, 'blog_detail.html', context)
 
@@ -32,4 +34,5 @@ def blog_with_type(request, blog_type_id):
     blog_type = get_object_or_404(BlogType, id=blog_type_id)
     context['blogs'] = Blog.objects.filter(blog_type=blog_type)
     context['blog_type'] = blog_type
+    context['blog_types'] = BlogType.objects.all()
     return render(request ,'blog_with_type.html', context)

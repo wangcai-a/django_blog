@@ -1,0 +1,9 @@
+ul.blog-types{
+    list-style-type: none;
+}
+
+div.blog{
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+    border-bottom: #c0c0c0;
+}
