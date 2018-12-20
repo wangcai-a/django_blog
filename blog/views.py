@@ -25,6 +25,7 @@ def blog_list(request):
     context['blogs'] = contacts
     context['blogs_count'] = Blog.objects.filter(is_deleted=False).count()
     context['blog_types'] = BlogType.objects.all()
+    context['now_page'] = int(page)
     return render(request ,'blog_list.html', context)
 
 
@@ -53,6 +54,8 @@ def blog_with_type(request, blog_type_id):
     blogs = Blog.objects.filter(blog_type=blog_type)
     paginator = Paginator(blogs, 10)
     page = request.GET.get('page')
+    if page is None:
+        page = 1
     try:
         contacts = paginator.page(page)
     except PageNotAnInteger:
@@ -64,4 +67,5 @@ def blog_with_type(request, blog_type_id):
     context['blogs_count'] = Blog.objects.filter(blog_type=blog_type).count()
     context['blog_type'] = blog_type
     context['blog_types'] = BlogType.objects.all()
+    context['now_page'] = int(page)
     return render(request, 'blog_with_type.html', context)

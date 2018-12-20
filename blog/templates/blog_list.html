@@ -39,15 +39,19 @@
           <ul class="pagination">
             <li>
               <a href="?page=1" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
+                首页
               </a>
             </li>
               {% for page in paginator.page_range %}
-                    <li><a href="?page={{ page }}">{{ page }}</a></li>
+                  {% if now_page == page %}
+                    <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>
+                  {% else %}
+                      <li><a href="?page={{ page }}">{{ page }}</a></li>
+                  {% endif %}
               {% endfor %}
             <li>
               <a href="?page={{ paginator.page_range|length }}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
+                尾页
               </a>
             </li>
           </ul>
