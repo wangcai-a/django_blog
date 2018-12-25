@@ -3,6 +3,7 @@ from markdown.extensions.toc import TocExtension
 from django.utils.text import slugify
 import markdown
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from comment.forms import CommentForm
 
 # Create your views here.
 from django.http import HttpResponse, Http404
@@ -15,6 +16,8 @@ def blog_list(request):
 
     paginator = Paginator(blogs, 10)
     page = request.GET.get('page')
+    if page is None:
+        page = 1
     try:
         contacts = paginator.page(page)
     except PageNotAnInteger:
@@ -39,11 +42,16 @@ def blog_detail(request, blog_id):
     article = get_object_or_404(Blog, pk=blog_id)
 
     article.content = md.convert(article.content)
+    # 获取这篇文字的评论
+    form = CommentForm()
+    comment_list = article.comment_set.all()
 
     context = {
         'blog': article,
         'blog_toc': md.toc,
-        'blog_types': BlogType.objects.all()
+        'blog_types': BlogType.objects.all(),
+        'blog_comments': comment_list,
+        'form': form
     }
     return render(request, 'blog_detail.html', context)
 
