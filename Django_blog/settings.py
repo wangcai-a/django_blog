@@ -25,7 +25,7 @@ SECRET_KEY = 'dzuz6!ue9u*k(+)py(84d@l5)=$#-=8#7cqb7e)(&g3c_$_&fn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost ', '.peng1.wang']
 
 AUTH_USER_MODEL = 'user.User'
 
