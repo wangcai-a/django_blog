@@ -42,6 +42,11 @@ def blog_detail(request, blog_id):
     article = get_object_or_404(Blog, pk=blog_id)
 
     article.content = md.convert(article.content)
+
+    # 打开增加一个阅读数
+    article.read_num += 1
+    article.save()
+
     # 获取这篇文字的评论
     form = CommentForm()
     comment_list = article.comment_set.all()
@@ -53,7 +58,9 @@ def blog_detail(request, blog_id):
         'blog_comments': comment_list,
         'form': form
     }
-    return render(request, 'blog_detail.html', context)
+    response = render(request, 'blog_detail.html', context)
+    response.set_cookie('blog_%s_read' % blog_id, 'true', max_age=300)
+    return response
 
 
 def blog_with_type(request, blog_type_id):

@@ -26,6 +26,7 @@
                         </p>
                         <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-user" aria-hidden="true">{{ blog.author }}</p>
                         <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-time">{{ blog.created_time|date:"Y-m-d H:n:s" }}</p>
+                        <p>阅读数({{ blog.read_num }})</p>
                         <p>{{ blog.content|truncatewords:30 }}</p>
                     </div>
                 {% empty %}
