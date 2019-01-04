@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'blog',
     'user',
     'comment',
+    'mdeditor',
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,6 @@ STATICFILES_DIRS = [
 
 # 设置登录跳转页面
 LOGIN_REDIRECT_URL = '/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = '/media/'

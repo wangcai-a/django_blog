@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls import path, re_path, include
 from django.contrib import admin
 from .views import home
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', home, name='home'),
@@ -23,5 +25,10 @@ urlpatterns = [
     re_path(r'^blog/', include('blog.urls')),
     path('user/', include('user.urls')),
     path('user/', include('django.contrib.auth.urls')),
-    path('comment/', include('comment.urls'))
+    path('comment/', include('comment.urls')),
+    re_path(r'mdeditor/', include('mdeditor.urls')),
 ]
+
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
