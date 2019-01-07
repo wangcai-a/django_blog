@@ -12,24 +12,8 @@ from .models import Blog, BlogType
 
 
 def blog_list(request):
-    context = {}
     blogs = Blog.objects.filter(is_deleted=False)
-
-    paginator = Paginator(blogs, 10)
-    page = request.GET.get('page')
-    if page is None:
-        page = 1
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-        contacts = paginator.page(1)
-    except EmptyPage:
-        contacts = paginator.page(paginator.num_pages)
-    context['paginator'] = paginator
-    context['blogs'] = contacts
-    context['blogs_count'] = Blog.objects.filter(is_deleted=False).count()
-    context['blog_types'] = BlogType.objects.all()
-    context['now_page'] = int(page)
+    context = get_list_detail(request, blogs)
     return render(request ,'blog_list.html', context)
 
 
@@ -65,38 +49,24 @@ def blog_detail(request, blog_id):
 
 
 def blog_with_type(request, blog_type_id):
-    context = {}
     blog_type = get_object_or_404(BlogType, id=blog_type_id)
     blogs = Blog.objects.filter(blog_type=blog_type)
-    paginator = Paginator(blogs, 10)
-    page = request.GET.get('page')
-    if page is None:
-        page = 1
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-        contacts = paginator.page(1)
-    except EmptyPage:
-        contacts = paginator.page(paginator.num_pages)
-    context['paginator'] = paginator
-    context['blogs'] = contacts
-    context['blogs_count'] = Blog.objects.filter(blog_type=blog_type).count()
-    context['blog_type'] = blog_type
-    context['blog_types'] = BlogType.objects.all()
-    context['now_page'] = int(page)
+    context = get_list_detail(request, blogs)
     return render(request, 'blog_with_type.html', context)
 
 
 def blog_search(request):
     q = request.GET.get('q')
     err_msg = ''
-
-    context = {}
     if not q:
         err_msg = '请输入关键词'
         return render(request, 'blog_list.html', {'err_msg': err_msg})
-
     blogs = Blog.objects.filter(Q(title__icontains=q) | Q(content__icontains=q))
+    context = get_list_detail(request, blogs)
+    return render(request, 'blog_list.html', context=context)
+
+
+def get_list_detail(request, blogs):
     paginator = Paginator(blogs, 10)
     page = request.GET.get('page')
     if page is None:
@@ -107,9 +77,11 @@ def blog_search(request):
         contacts = paginator.page(1)
     except EmptyPage:
         contacts = paginator.page(paginator.num_pages)
-    context['paginator'] = paginator
-    context['blogs'] = contacts
-    context['blogs_count'] = Blog.objects.filter(is_deleted=False).count()
-    context['blog_types'] = BlogType.objects.all()
-    context['now_page'] = int(page)
-    return render(request, 'blog_list.html', context=context)
+    context = {
+        'paginator': paginator,
+        'blogs': contacts,
+        'blogs_count': Blog.objects.filter(is_deleted=False).count(),
+        'blog_types': BlogType.objects.all(),
+        'now_page': int(page)
+    }
+    return context
