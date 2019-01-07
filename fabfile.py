@@ -18,6 +18,7 @@ env.port = '22'
 def deploy():
     source_folder = '/home/peng1/sites/peng1/django_blog'
 
+    run('cd %s && git reset --hard' % source_folder)
     run('cd %s && git pull' % source_folder)
     run("""
         cd {} &&
