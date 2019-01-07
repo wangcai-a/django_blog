@@ -28,9 +28,11 @@ def blog_detail(request, blog_id):
 
     article.content = md.convert(article.content)
 
-    # 打开增加一个阅读数
-    article.read_num += 1
-    article.save()
+    # 通过cookies判断是否增加阅读数
+    if not request.COOKIES.get('blog_%s_read' % blog_id):
+        # 打开增加一个阅读数
+        article.read_num += 1
+        article.save()
 
     # 获取这篇文字的评论
     form = CommentForm()
