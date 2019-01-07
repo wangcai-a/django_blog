@@ -30,8 +30,14 @@
             </div>
             <div id="navbar-collapse" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                <li><a href="{% url 'home' %}">首页</a></li>
-                <li><a href="{% url 'blog:blog_list' %}">博客</a></li>
+                    <li><a href="{% url 'home' %}">首页</a></li>
+                    <li><a href="{% url 'blog:blog_list' %}">博客</a></li>
+                    <form action="{% url 'blog:blog_search' %}" class="navbar-form navbar-left" method="get">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="搜索博文" name="q">
+                        </div>
+                        <button class="btn btn-default">搜索</button>
+                    </form>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>

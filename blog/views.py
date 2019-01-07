@@ -4,6 +4,7 @@ from django.utils.text import slugify
 import markdown
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from comment.forms import CommentForm
+from django.db.models import Q
 
 # Create your views here.
 from django.http import HttpResponse, Http404
@@ -84,3 +85,31 @@ def blog_with_type(request, blog_type_id):
     context['blog_types'] = BlogType.objects.all()
     context['now_page'] = int(page)
     return render(request, 'blog_with_type.html', context)
+
+
+def blog_search(request):
+    q = request.GET.get('q')
+    err_msg = ''
+
+    context = {}
+    if not q:
+        err_msg = '请输入关键词'
+        return render(request, 'blog_list.html', {'err_msg': err_msg})
+
+    blogs = Blog.objects.filter(Q(title__icontains=q) | Q(content__icontains=q))
+    paginator = Paginator(blogs, 10)
+    page = request.GET.get('page')
+    if page is None:
+        page = 1
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
+    context['paginator'] = paginator
+    context['blogs'] = contacts
+    context['blogs_count'] = Blog.objects.filter(is_deleted=False).count()
+    context['blog_types'] = BlogType.objects.all()
+    context['now_page'] = int(page)
+    return render(request, 'blog_list.html', context=context)
