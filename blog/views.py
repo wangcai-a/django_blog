@@ -32,15 +32,12 @@ def blog_detail(request, blog_id):
     ct = ContentType.objects.get_for_model(Blog)
     try:
         re = ReadNum.objects.get(content_type=ct, object_id=blog_id)
-        re.read_num += 1
+        # 通过cookies判断是否增加阅读数
+        if not request.COOKIES.get('blog_%s_read' % blog_id):
+            re.read_num += 1
     except:
         re = ReadNum(content_type=ct, object_id=blog_id, read_num=1)
     re.save()
-    # # 通过cookies判断是否增加阅读数
-    # if not request.COOKIES.get('blog_%s_read' % blog_id):
-    #     # 打开增加一个阅读数
-    #     article.read_num += 1
-    #     article.save()
 
     # 获取这篇文字的评论
     form = CommentForm()
@@ -54,6 +51,7 @@ def blog_detail(request, blog_id):
         'form': form
     }
     response = render(request, 'blog_detail.html', context)
+    # 设置cookies,过期时间设为300秒
     response.set_cookie('blog_%s_read' % blog_id, 'true', max_age=300)
     return response
 
