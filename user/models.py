@@ -5,5 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    nickname = models.CharField(max_length=10, blank=True)
+
     class Meta(AbstractUser.Meta):
-        pass
+        swappable = 'AUTH_USER_MODEL'
