@@ -10,5 +10,5 @@ class BlogType(admin.ModelAdmin):
 
 @admin.register(Blog)
 class BlogArticleAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "author", "is_deleted", "content", "read_num","created_time", "last_updated_time")
+    list_display = ("id", "title", "author", "is_deleted", "content", "get_read_num","created_time", "last_updated_time")
     ordering = ("id",)

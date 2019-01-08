@@ -9,6 +9,7 @@ from django.db.models import Q
 # Create your views here.
 from django.http import HttpResponse, Http404
 from .models import Blog, BlogType
+from readnum.models import ContentType, ReadNum
 
 
 def blog_list(request):
@@ -28,11 +29,18 @@ def blog_detail(request, blog_id):
 
     article.content = md.convert(article.content)
 
-    # 通过cookies判断是否增加阅读数
-    if not request.COOKIES.get('blog_%s_read' % blog_id):
-        # 打开增加一个阅读数
-        article.read_num += 1
-        article.save()
+    ct = ContentType.objects.get_for_model(Blog)
+    try:
+        re = ReadNum.objects.get(content_type=ct, object_id=blog_id)
+        re.read_num += 1
+    except:
+        re = ReadNum(content_type=ct, object_id=blog_id, read_num=1)
+    re.save()
+    # # 通过cookies判断是否增加阅读数
+    # if not request.COOKIES.get('blog_%s_read' % blog_id):
+    #     # 打开增加一个阅读数
+    #     article.read_num += 1
+    #     article.save()
 
     # 获取这篇文字的评论
     form = CommentForm()

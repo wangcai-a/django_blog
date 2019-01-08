@@ -6,4 +6,4 @@ from .models import ReadNum
 
 @admin.register(ReadNum)
 class ReadNum(admin.ModelAdmin):
-    list_display = ('id', 'read_num')
+    list_display = ('id', 'content_object', 'read_num')
