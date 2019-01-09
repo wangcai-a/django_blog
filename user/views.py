@@ -25,7 +25,7 @@ def register(request):
     # 如果用户正在访问页面,则渲染一个空的表单
     # 如果提交一个不合法的信息,则渲染带有错误信息的表单
     return render(request,
-                  'register.html',
+                  'registration/register.html',
                   # context={'form': form, 'next':redirect_to}
                   context={'form': form}
                   )
