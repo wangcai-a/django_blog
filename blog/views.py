@@ -5,6 +5,7 @@ import markdown
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from comment.forms import CommentForm
 from django.db.models import Q
+from django.db.models.fields import exceptions
 
 # Create your views here.
 from django.http import HttpResponse, Http404
@@ -35,7 +36,7 @@ def blog_detail(request, blog_id):
         # 通过cookies判断是否增加阅读数
         if not request.COOKIES.get('blog_%s_read' % blog_id):
             re.read_num += 1
-    except:
+    except exceptions.ObjectDoesNotExist:
         re = ReadNum(content_type=ct, object_id=blog_id, read_num=1)
     re.save()
 
@@ -65,7 +66,6 @@ def blog_with_type(request, blog_type_id):
 
 def blog_search(request):
     q = request.GET.get('q')
-    err_msg = ''
     if not q:
         err_msg = '请输入关键词'
         return render(request, 'blog_list.html', {'err_msg': err_msg})

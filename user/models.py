@@ -8,4 +8,4 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=10, blank=True)
 
     class Meta(AbstractUser.Meta):
-        swappable = 'AUTH_USER_MODEL'
+        pass
