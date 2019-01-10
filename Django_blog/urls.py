@@ -22,11 +22,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', home, name='home'),
     re_path(r'^admin/', admin.site.urls, name='admin'),
+    re_path(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'^blog/', include('blog.urls')),
     path('user/', include('user.urls')),
     path('user/', include('django.contrib.auth.urls')),
     path('comment/', include('comment.urls')),
-    re_path(r'mdeditor/', include('mdeditor.urls')),
+    path('data/', include('data.urls'))
 ]
 
 if settings.DEBUG:
