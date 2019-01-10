@@ -5,5 +5,5 @@ app_name = 'data'
 
 # start with blog
 urlpatterns = [
-    path('', views.site_data, name='data'),
+    path('', views.get_week_data, name='data'),
 ]

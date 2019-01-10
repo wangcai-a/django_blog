@@ -10,13 +10,13 @@ from django.db.models.fields import exceptions
 # Create your views here.
 from django.http import HttpResponse, Http404
 from .models import Blog, BlogType
-from readnum.models import ContentType, ReadNum
+from data.models import ContentType, ReadNum
 
 
 def blog_list(request):
     blogs = Blog.objects.filter(is_deleted=False)
     context = get_list_detail(request, blogs)
-    return render(request ,'blog_list.html', context)
+    return render(request, 'blog_list.html', context)
 
 
 def blog_detail(request, blog_id):

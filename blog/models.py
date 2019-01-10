@@ -1,8 +1,8 @@
 from django.db import models
 from user.models import User
 from mdeditor.fields import MDTextField
-from readnum.models import ContentType, ReadNum
-from readnum.utils import ReadNumExtend
+from data.models import ContentType, ReadNum
+from data.utils import ReadNumExtend
 
 # Create your models here.
 

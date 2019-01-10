@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'blog',
     'user',
     'comment',
-    'readnum',
     'data',
 ]
 
