@@ -9,8 +9,8 @@ import pytz
 
 
 def get_week_data(request):
-    now = datetime.datetime.now(tzinfo=pytz.UTC+8)
-    now_day = datetime.datetime(now.year, now.month, now.day, 0, 0)
+    now = datetime.datetime.now()
+    now_day = datetime.datetime(now.year, now.month, now.day, 0, 0, tzinfo=pytz.timezone('Asia/Shanghai'))
     days = []
     days_str = []
     counts = []
@@ -32,5 +32,4 @@ def get_week_data(request):
         'read_num': counts,
         'days': days_str,
     }
-    print(context)
     return render(request, 'data.html', context=context)
