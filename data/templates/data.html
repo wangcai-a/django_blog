@@ -3,7 +3,7 @@
 
 {% block header %}
     <link rel="stylesheet" href="{% static 'data.css' %}">
-    <script src="{% static 'echarts.simple.min.js' %}"></script>
+    <script src="{% static 'echarts.min.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -19,18 +19,22 @@
         // 指定图表的配置项和数据
         var option = {
             title: {
-                text: 'ECharts 入门示例'
+                x: "center",
+                text: '阅读量统计'
             },
             tooltip: {},
             legend: {
-                data:['销量']
+                show: false,
+                data:['阅读量']
             },
             xAxis: {
+                name: "日期",
                 data: {{ days|safe }}
             },
-            yAxis: {},
+            yAxis: {
+                name: '阅读量',
+            },
             series: [{
-                name: '销量',
                 type: 'line',
                 data: {{ read_num }}
             }]
