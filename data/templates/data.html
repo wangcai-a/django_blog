@@ -3,7 +3,6 @@
 
 {% block header %}
     <link rel="stylesheet" href="{% static 'data.css' %}">
-    <script src="{% static 'echarts.min.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -12,35 +11,34 @@
 
 {% block content %}
     <div id="read_data" style="width: 600px;height:400px;"></div>
-    <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('read_data'));
-
-        // 指定图表的配置项和数据
-        var option = {
-            title: {
-                x: "center",
-                text: '阅读量统计'
+    <!-- 引入 highcharts.js -->
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <script>
+        // 图表配置
+        var options = {
+            chart: {
+                type: 'line'                          //指定图表的类型，默认是折线图（line）
             },
-            tooltip: {},
-            legend: {
-                show: false,
-                data:['阅读量']
+            title: {
+                text: '博客阅读数'                 // 标题
             },
             xAxis: {
-                name: "日期",
-                data: {{ days|safe }}
+                title: {
+                    text: '日期'                // y 轴标题
+                },
+                categories: {{ days|safe }}   // x 轴分类
             },
             yAxis: {
-                name: '阅读量',
+                title: {
+                    text: '阅读数'                // y 轴标题
+                }
             },
-            series: [{
-                type: 'line',
-                data: {{ read_num }}
+            series: [{                              // 数据列
+                name: '阅读数',                        // 数据列名
+                data: {{ read_num }}                     // 数据
             }]
         };
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+        // 图表初始化函数
+        var chart = Highcharts.chart('read_data', options);
     </script>
 {% endblock %}
