@@ -29,3 +29,7 @@ def register(request):
                   # context={'form': form, 'next':redirect_to}
                   context={'form': form}
                   )
+
+
+def user_center(request):
+    return render(request, 'user_center.html')

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block header %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block title %}
+    用户中心
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">个人信息</div>
+                <div class="panel-body">
+                    <h3>暂无</h3>
+                </div>
+            </div>
+        </div>
+    <div class="col-md-6 col-lg-6">
+        <div class="panel panel-default">
+              <div class="panel-heading">浏览足迹</div>
+              <div class="panel-body">
+                <h3>暂无</h3>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg 12">
+            <div class="panel panel-default">
+                <div class="panel-heading">未读消息</div>
+                <div class="panel-body">
+                    <h3>暂无</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
