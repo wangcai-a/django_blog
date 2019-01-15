@@ -16,7 +16,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading">个人信息</div>
                 <div class="panel-body">
-                    <h3>暂无</h3>
+                    <h4>{{ user.username }}</h4>
+                    <p>注册邮箱: {{ user.email }}</p>
+                    <p>注册时间: {{ user.date_joined }}</p>
+                    <p>最近登录: {{ user.last_login }}</p>
                 </div>
             </div>
         </div>
@@ -24,13 +27,14 @@
         <div class="panel panel-default">
               <div class="panel-heading">浏览足迹</div>
               <div class="panel-body">
-                <h3>暂无</h3>
+                  <p>最近浏览文章: </p>
+                  <p>评论数量: </p>
+                  <p>回复数量: </p>
+                  <p>收到的回复数量: </p>
               </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
         <div class="col-md-12 col-lg 12">
             <div class="panel panel-default">
                 <div class="panel-heading">未读消息</div>
