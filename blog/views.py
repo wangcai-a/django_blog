@@ -3,14 +3,12 @@ from markdown.extensions.toc import TocExtension
 from django.utils.text import slugify
 import markdown
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from comment.forms import CommentForm
 from django.db.models import Q
-from django.db.models.fields import exceptions
 
 # Create your views here.
-from django.http import HttpResponse, Http404
 from .models import Blog, BlogType
-from data.models import ContentType, ReadNum
+from data.models import ContentType
+from comment.models import Comment
 
 from data.decorator import get_read_num
 
@@ -34,15 +32,14 @@ def blog_detail(request, id):
     article.content = md.convert(article.content)
 
     # 获取这篇文字的评论
-    form = CommentForm()
-    comment_list = article.comment_set.all()
+    ct = ContentType.objects.get_for_model(Blog)
+    comment_list = Comment.objects.filter(content_type=ct, object_id=id)
 
     context = {
         'blog': article,
         'blog_toc': md.toc,
         'blog_types': BlogType.objects.all(),
-        'blog_comments': comment_list,
-        'form': form
+        'blog_comments': comment_list.all(),
     }
     response = render(request, 'blog_detail.html', context)
     return response

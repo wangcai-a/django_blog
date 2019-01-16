@@ -33,27 +33,21 @@
             </div>
         </div>
         <div class="comments">
-            <form action="{% url 'comment:blog_comment' blog.pk %}" method="post" class="comment-form">
-              {% csrf_token %}
+            {% if user.is_authenticated %}
+            <form action="{% url 'comment:blog_comment' %}" method="post" class="comment-form">
               <div class="row">
-                <div class="col-md-4">
-                  <label for="{{ form.username.id_for_label }}">名字：</label>
-                  {{ form.username }}
-                  {{ form.username.errors }}
-                </div>
-                <div class="col-md-4">
-                  <label for="{{ form.email.id_for_label }}">邮箱：</label>
-                  {{ form.email }}
-                  {{ form.email.errors }}
-                </div>
-                <div class="col-md-12">
-                  <label for="{{ form.text.id_for_label }}">评论：</label>
-                  {{ form.text }}
-                  {{ form.text.errors }}
-                  <button type="submit" class="comment-btn">发表</button>
+                <div class="col-md-8">
+                    {% csrf_token %}
+                    <textarea name="comment" id="" cols="30" rows="10">{{ form.comment }}</textarea>
+                    <input type="hidden" name="content_type" value="blog">
+                    <input type="hidden" name="object_id" value="{{ blog.pk }}">
+                  <button type="submit" class="comment-btn">提交评论</button>
                 </div>
               </div>    <!-- row -->
             </form>
+            {% else %}
+                <p>请先登录后再评论</p>
+            {% endif %}
         </div>
         <div class="comment-list">
             <h2>评论列表</h2>
