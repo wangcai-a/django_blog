@@ -32,39 +32,46 @@
                 </div>
             </div>
         </div>
-        <div class="comments">
-            {% if user.is_authenticated %}
-            <form action="{% url 'comment:blog_comment' %}" method="post" class="comment-form">
-              <div class="row">
-                <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">评论列表</div>
+            <div class="panel-body">
+                 <div class="comment-list">
+                    <ul class="comment-list list-unstyled">
+                      {% for comment in blog_comments %}
+                        <li class="comment-item">
+                        <span class="nickname">{{ comment.username }}</span>
+                        <time class="submit-date">{{ comment.created_time }}</time>
+                        <div class="text">
+                          {{ comment.text }}
+                        </div>
+                        </li>
+                      {% empty %}
+                      暂无评论
+                      {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">评论</div>
+            <div class="panel-body">
+                <div class="comment">
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'comment:blog_comment' %}" method="post" class="comment-form">
+                    <div class="control-group"></div>
                     {% csrf_token %}
-                    <textarea name="comment" id="" cols="30" rows="10">{{ form.comment }}</textarea>
-                    <input type="hidden" name="content_type" value="blog">
-                    <input type="hidden" name="object_id" value="{{ blog.pk }}">
-                  <button type="submit" class="comment-btn">提交评论</button>
+                        <textarea class="form-control" name="comment" id="" cols="30" rows="3" placeholder="写下你的评论">{{ form.comment }}</textarea>
+                        <input type="hidden" name="content_type" value="blog">
+                        <input type="hidden" name="object_id" value="{{ blog.pk }}">
+                    <button type="submit" class="comment-btn" style="float: right;">提交评论</button>
+                    </form>
+                    {% else %}
+                        <p>请先登录后再评论</p>
+                    {% endif %}
                 </div>
-              </div>    <!-- row -->
-            </form>
-            {% else %}
-                <p>请先登录后再评论</p>
-            {% endif %}
+            </div>
         </div>
-        <div class="comment-list">
-            <h2>评论列表</h2>
-            <ul class="comment-list list-unstyled">
-              {% for comment in blog_comments %}
-              <li class="comment-item">
-                <span class="nickname">{{ comment.username }}</span>
-                <time class="submit-date">{{ comment.created_time }}</time>
-                <div class="text">
-                  {{ comment.text }}
-                </div>
-              </li>
-              {% empty %}
-              暂无评论
-              {% endfor %}
-            </ul>
-        </div>
+
         </div>
         <div class="col-md-4 col-lg-4">
             <div class="panel panel-default">
