@@ -9,6 +9,7 @@ from django.db.models import Q
 from .models import Blog, BlogType
 from data.models import ContentType
 from comment.models import Comment
+from comment.forms import CommentForm
 
 from data.decorator import get_read_num
 
@@ -34,12 +35,18 @@ def blog_detail(request, id):
     # 获取这篇文字的评论
     ct = ContentType.objects.get_for_model(Blog)
     comment_list = Comment.objects.filter(content_type=ct, object_id=id)
+    form_data = {
+        'content_type': ct.model,
+        'object_id':  id,
+    }
+    comment_form = CommentForm(initial=form_data)
 
     context = {
         'blog': article,
         'blog_toc': md.toc,
         'blog_types': BlogType.objects.all(),
         'blog_comments': comment_list.all(),
+        'comment_form': comment_form,
     }
     response = render(request, 'blog_detail.html', context)
     return response

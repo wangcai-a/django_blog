@@ -1,24 +1,23 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from .models import Comment, ContentType
-from django.http import Http404
+from .forms import CommentForm
 
 # Create your views here.
 
 
 def blog_comment(request):
-    # 判断是否登录
-    if not request.user.is_authenticated:
-        return Http404
-    text = request.POST['comment']
-    # 判断是否提交空字符串
-    if text.strip() == '':
-        return Http404
-    else:
-        content_type = request.POST['content_type']
-        object_id = request.POST['object_id']
+    referer = request.META.get('HTTP_REFERER', reverse('home'))
+    comment_form = CommentForm(request.POST, user=request.user)
+    if comment_form.is_valid():
+        # 检测通过,保存数据
         comment_user = request.user
-    ct = ContentType.objects.get(model=content_type)
-    comment_data = Comment(content_type=ct, object_id=object_id, text=text, comment_user=comment_user)
-    comment_data.save()
-
-    return redirect('blog:blog_detail', object_id)
+        content_type = comment_form.cleaned_data['content_type']
+        text = comment_form.cleaned_data['comment']
+        object_id = comment_form.cleaned_data['object_id']
+        ct = ContentType.objects.get(model=content_type)
+        comment_data = Comment(content_type=ct, object_id=object_id, text=text, comment_user=comment_user)
+        comment_data.save()
+        return redirect('blog:blog_detail', object_id)
+    else:
+        return render(request, 'error.html', {'message': comment_form.errors, 'redirect_to': referer})
