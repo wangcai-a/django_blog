@@ -150,3 +150,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# 设置CKeditor
+CKEDITOR_CONFIGS = {
+    'comment_ckeditor':{
+        'toolbar': 'custom',
+        'toolbar_custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+            ['TextColor', 'BGColor', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList'],
+            ['Link', 'UnLink'],
+            ['Smiley', 'SpecialChar', 'Blockquote'],
+        ],
+        'width': 'auto',
+        'heigth': '180',
+        'tabSpace': 4,
+        'removePlugins': 'elementspath',
+        'resize_enabled': False,
+    }
+}

@@ -14,3 +14,11 @@ div.blog{
 div.blog div.toc{
     display: none;
 }
+
+div.django-ckeditor-widget {
+    width: 100%;
+}
+
+div#comment{
+    padding: 0;
+}
