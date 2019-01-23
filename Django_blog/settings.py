@@ -137,11 +137,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+# 指定静态文件的位置
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'Django_blog/static')
-]
+
+# 运行collectstatic后静态文件放置的位置,放置公共的static文件
+STATIC_ROOT = os.path.join(BASE_DIR, 'Django_blog/static')
+
+# # 额外的静态文件放置位置
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'Django_blog/static')
+# ]
 
 # 设置登录跳转页面
 LOGIN_REDIRECT_URL = '/'
