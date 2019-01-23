@@ -102,5 +102,27 @@
 {% endblock %}
 
 
+{% block script_extends %}
+    <script type="text/javascript">
+        $("#comment_form").submit(function () {
+            // 异步提交
+            $.ajax({
+                url: "{% url 'comment:blog_comment' %}",
+                type: 'POST',
+                data: $(this).serialize(),
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+
+            return false
+        })
+    </script>
+{% endblock %}
+
 
 

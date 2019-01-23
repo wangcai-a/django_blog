@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.http import JsonResponse
 from .models import Comment, ContentType
 from .forms import CommentForm
 
@@ -18,6 +19,12 @@ def blog_comment(request):
         ct = ContentType.objects.get(model=content_type)
         comment_data = Comment(content_type=ct, object_id=object_id, text=text, comment_user=comment_user)
         comment_data.save()
-        return redirect('blog:blog_detail', object_id)
+        data = {
+            'status': 'success'
+        }
     else:
-        return render(request, 'error.html', {'message': comment_form.errors, 'redirect_to': referer})
+        data = {
+            'status': 'error'
+        }
+
+    return JsonResponse(data)
