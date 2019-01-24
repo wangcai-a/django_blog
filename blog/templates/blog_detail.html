@@ -41,8 +41,8 @@
                     <ul class="comment-list list-unstyled">
                       {% for comment in blog_comments %}
                         <li class="comment-item">
-                        <span class="nickname">{{ comment.username }}</span>
-                        <time class="submit-date">{{ comment.created_time }}</time>
+                        <span class="nickname">{{ comment.comment_user.username }}</span>
+                        <time class="submit-date">({{ comment.created_time }})</time>
                         <div class="text">
                           {{ comment.text|safe }}
                         </div>
