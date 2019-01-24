@@ -28,7 +28,7 @@
                     </p>
                     <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-user" aria-hidden="true">{{ blog.author }}</p>
                     <p class="blog-info glyphicon glyphicon-eye-open">({{ blog.get_read_num }})</p>
-                    <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-time">{{ blog.created_time|date:"Y-m-d H:n:s" }}</p>
+                    <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-time">{{ blog.created_time|date:"Y-m-d H:i:s" }}</p>
                     <!--增加safe过滤器,表示不需要转义,直接显示原始内容-->
                     <p>{{ blog.content | safe }} </p>
                 </div>
@@ -59,11 +59,14 @@
             <div class="panel-body" id="comment">
                 <div class="comment">
                     {% if user.is_authenticated %}
-                    <form action="{% url 'comment:blog_comment' %}" method="post" class="comment-form">
+                    <form id="comment_form" class="comment-form">
                     {% csrf_token %}
-                        {% for field in comment_form %}
-                        {{ field }}
-                        {% endfor %}
+                        <div id="comment_list">
+                            {% for field in comment_form %}
+                            {{ field }}
+                            {% endfor %}
+                        </div>
+                    <span id="comment_error" class="text-danger">{{ comment_form.errors }}</span>
                     <button type="submit" class="comment-btn" style="float: right;">提交评论</button>
                     </form>
                     {% else %}
@@ -105,21 +108,41 @@
 {% block script_extends %}
     <script type="text/javascript">
         $("#comment_form").submit(function () {
+            // 判断数据是否为空
+            $("#comment_error").text('');
+            if(CKEDITOR.instances['id_comment'].document.getBody().getText().trim() == ''){
+                $("#comment_error").text('评论内容为空');
+                return false;
+            }
+
+            // 异步提交数据到textarea
+            CKEDITOR.instances['id_comment'].updateElement();
             // 异步提交
             $.ajax({
-                url: "{% url 'comment:blog_comment' %}",
                 type: 'POST',
+                url: "{% url 'comment:blog_comment' %}",
                 data: $(this).serialize(),
                 cache: false,
                 success: function (data) {
                     console.log(data);
+                    if(data['status']=='success'){
+                        // 插入数据
+                        var comment_html = '<div>' + data['username'] + '(' + data['comment_time'] + ')'
+                                            + ':' + data['text'] + '</div>';
+                        $("#comment_list").prepend(comment_html);
+                        // 清空编辑框的内容
+                        CKEDITOR.instances['id_comment'].setData('');
+                    }else{
+                        $("#comment_error").text(data['message']);
+                    }
+
                 },
                 error: function (xhr) {
                     console.log(xhr);
+                    return false;
                 }
             });
 
-            return false
         })
     </script>
 {% endblock %}

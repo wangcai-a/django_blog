@@ -8,7 +8,7 @@ from .forms import CommentForm
 
 
 def blog_comment(request):
-    referer = request.META.get('HTTP_REFERER', reverse('home'))
+
     comment_form = CommentForm(request.POST, user=request.user)
     if comment_form.is_valid():
         # 检测通过,保存数据
@@ -20,11 +20,14 @@ def blog_comment(request):
         comment_data = Comment(content_type=ct, object_id=object_id, text=text, comment_user=comment_user)
         comment_data.save()
         data = {
-            'status': 'success'
+            'status': 'success',
+            'username': comment_data.comment_user.username,
+            'comment_time': comment_data.created_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'comment': comment_data.text,
         }
     else:
         data = {
-            'status': 'error'
+            'status': 'error',
+            'message': list(comment_form.errors.values())[0][0]
         }
-
     return JsonResponse(data)
