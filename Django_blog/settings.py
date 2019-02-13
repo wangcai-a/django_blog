@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost ', '.peng1.wang']
 
+DOMAIN = '127.0.0.1:8000'
+
 AUTH_USER_MODEL = 'user.User'
 
 
@@ -154,8 +156,6 @@ LOGIN_REDIRECT_URL = '/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 # 设置CKeditor
 CKEDITOR_CONFIGS = {
     'comment_ckeditor':{
@@ -174,3 +174,13 @@ CKEDITOR_CONFIGS = {
         'resize_enabled': False,
     }
 }
+
+# 邮箱配置
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_HOST_USER = '535719197@qq.com'
+EMAIL_HOST_PASSWORD = 'xbmnarfevvojcbcc'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# 开始后台电子邮件(不发送邮件在后台显示)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
