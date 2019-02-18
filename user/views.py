@@ -73,5 +73,20 @@ def user_center(request):
     return render(request, 'user_center.html')
 
 
-def user_activate(request):
-    pass
+def user_activate(request, token):
+    try:
+        username = token_confirm.confirm_validate_token(token)
+    except:
+        username = token_confirm.remove_validate_token(token)
+        users = User.objects.filter(username=username)
+        for user in users:
+            user.delete()
+        return render(request, 'message.html', {'message': "对不起,验证码已经过期,请重新注册",})
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return render(request, 'message.html', {'message': "对不起,用户不存在,请重新注册"})
+    user.is_active = 1
+    user.save()
+    message = '<h3 class="home-content">验证成功,请登录</h2>'
+    return render(request, 'message.html', {'message': message})

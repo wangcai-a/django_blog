@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 app_name = 'user'
@@ -7,5 +7,5 @@ app_name = 'user'
 urlpatterns = [
     path('register/', views.register, name='register'),
     path('usercenter/', views.user_center, name='usercenter'),
-    path('activate/', views.user_activate, name='useractivate')
+    re_path(r'^activate/(?P<token>\w+.[-_\w]*\w+.[-_\w]*\w+)/$', views.user_activate, name='activeuser')
 ]

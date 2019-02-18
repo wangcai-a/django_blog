@@ -1,1 +1,10 @@
-{{ message }}
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block header %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block content %}
+{{ message|safe }}
+{% endblock %}
