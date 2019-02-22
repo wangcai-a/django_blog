@@ -90,3 +90,7 @@ def user_activate(request, token):
     user.save()
     message = '<h3 class="home-content">验证成功,请登录</h2>'
     return render(request, 'message.html', {'message': message})
+
+
+def password_reset(request):
+    pass
