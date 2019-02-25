@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm, PasswordResetForm
 from .models import User, User_ex
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 from itsdangerous import URLSafeTimedSerializer as utsr
@@ -46,7 +47,7 @@ def register(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
+            password = form.cleaned_data.get('password2')
             user = User.objects.create_user(username=username, email=email, password=password)
             user.is_active = False
             user.save()
