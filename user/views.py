@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
-from .models import User
+from .forms import RegisterForm, PasswordResetForm
+from .models import User, User_ex
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 from itsdangerous import URLSafeTimedSerializer as utsr
@@ -88,9 +89,44 @@ def user_activate(request, token):
         return render(request, 'message.html', {'message': "对不起,用户不存在,请重新注册"})
     user.is_active = 1
     user.save()
-    message = '<h3 class="home-content">验证成功,请登录</h2>'
+    message = '验证成功,请登录'
     return render(request, 'message.html', {'message': message})
 
 
 def password_reset(request):
-    pass
+    data = {}
+    data['form_title'] = '重置密码'
+    data['submit_name'] = '提交'
+
+    if request.method == 'POST':
+        # 表单提交
+        form = PasswordResetForm(request.POST)
+
+        # 验证是否合法
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            pwd = form.cleaned_data['pwd_2']
+            user = User.objects.get(email=email)
+            user.set_password(pwd)
+            user.save()
+
+            # 删除验证码
+            ex = User_ex.objects.filter(user=user)
+            if ex.count() > 0:
+                ex.delete()
+
+            # 重新登录
+            user = authenticate(username=user.username, password=pwd)
+            if user is not None:
+                login(request, user)
+
+            # 页面提示
+            data['goto_url'] = reversed('user_info')
+            data['goto_time'] = 3000
+            data['goto_page'] = True
+            data['message'] = '修改密码成功'
+            return render(request, 'message.html', data)
+    else:
+        form = PasswordResetForm()
+    data['form'] = form
+    return render(request, 'registration/password_reset_form.html', data)

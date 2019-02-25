@@ -178,6 +178,7 @@ CKEDITOR_CONFIGS = {
 # 邮箱配置
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_HOST_USER = '535719197@qq.com'
+# 邮箱授权码
 EMAIL_HOST_PASSWORD = 'xbmnarfevvojcbcc'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
