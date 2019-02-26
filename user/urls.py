@@ -7,6 +7,6 @@ app_name = 'user'
 urlpatterns = [
     path('register/', views.register, name='register'),
     path('usercenter/', views.user_center, name='usercenter'),
-    path('passwordreset/', views.password_reset, name='passwordreset'),
+    path('forgetpassword/', views.forget_password, name='forgetpassword'),
     re_path(r'^activate/(?P<token>\w+.[-_\w]*\w+.[-_\w]*\w+)/$', views.user_activate, name='activeuser')
 ]

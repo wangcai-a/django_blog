@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, PasswordResetForm
+from .forms import RegisterForm, ForgetPasswordForm
 from .models import User, User_ex
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
@@ -94,14 +94,14 @@ def user_activate(request, token):
     return render(request, 'message.html', {'message': message})
 
 
-def password_reset(request):
+def forget_password(request):
     data = {}
     data['form_title'] = '重置密码'
     data['submit_name'] = '提交'
 
     if request.method == 'POST':
         # 表单提交
-        form = PasswordResetForm(request.POST)
+        form = ForgetPasswordForm(request.POST)
 
         # 验证是否合法
         if form.is_valid():
@@ -128,6 +128,6 @@ def password_reset(request):
             data['message'] = '修改密码成功'
             return render(request, 'message.html', data)
     else:
-        form = PasswordResetForm()
+        form = ForgetPasswordForm()
     data['form'] = form
-    return render(request, 'registration/password_reset_form.html', data)
+    return render(request, 'password_reset_form.html', data)

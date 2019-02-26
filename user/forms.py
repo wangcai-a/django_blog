@@ -11,7 +11,7 @@ class RegisterForm(UserCreationForm):
         fields = ('username', 'email')
 
 
-class PasswordResetForm(forms.Form):
+class ForgetPasswordForm(forms.Form):
     email = forms.EmailField(label='用户邮箱', widget=forms.EmailInput(attrs={
         'class': 'form-control',
         'id': 'email',
