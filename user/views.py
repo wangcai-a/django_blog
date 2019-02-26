@@ -107,7 +107,8 @@ def forget_password(request):
         if form.is_valid():
             email = form.cleaned_data['email']
             pwd = form.cleaned_data['pwd_2']
-            user = User.objects.get(email=email)
+            username = form.cleaned_data['username']
+            user = User.objects.get(email=email, username=username)
             user.set_password(pwd)
             user.save()
 

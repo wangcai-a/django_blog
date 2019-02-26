@@ -12,6 +12,11 @@ class RegisterForm(UserCreationForm):
 
 
 class ForgetPasswordForm(forms.Form):
+    username = forms.CharField(label='用户名', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'id': 'username',
+        'placeholder': '请输入您的用户名',
+    }))
     email = forms.EmailField(label='用户邮箱', widget=forms.EmailInput(attrs={
         'class': 'form-control',
         'id': 'email',
