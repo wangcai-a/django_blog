@@ -12,7 +12,7 @@ class RegisterForm(UserCreationForm):
 
 
 class ForgetPasswordForm(forms.Form):
-    username = forms.CharField(label='用户名', widget=forms.EmailInput(attrs={
+    username = forms.CharField(label='用户名', widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'username',
         'placeholder': '请输入您的用户名',
@@ -38,6 +38,15 @@ class ForgetPasswordForm(forms.Form):
         'placeholder': '请输入验证码'
     }))
 
+    # 验证用户名是否存在
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        users = User.objects.filter(username=username)
+
+        if users.count() == 0:
+            raise ValidationError('用户名不存在')
+        return username
+
     # 验证邮箱是否存在
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -61,18 +70,52 @@ class ForgetPasswordForm(forms.Form):
         try:
             # 获取对应的用户
             email = self.cleaned_data.get('email')
+            username = self.cleaned_data.get('username')
             check_code = self.cleaned_data.get('check_code')
-            user = User.objects.filter(email=email)
+            user = User.objects.filter(email=email, username=username)
 
             # 回去用户对应的信息
-            user_ex = User_ex.objects.filter(user=user)
+            user_ex = User_ex.objects.filter(user_id=user[0].id)
             if user_ex.count() > 0:
+                user_ex = user_ex[0]
+            else:
                 raise ValidationError('未获取验证码')
-            if user_ex.valid_code != check_code:
+            if user_ex.vaild_code != check_code:
                 raise ValidationError('验证码不正确')
-        except Exception as e:
-            return ValidationError('验证码不对或失效')
+            return check_code
+        except Exception:
+            raise ValidationError('验证码不对或失效')
 
+
+class EmailCodeForm(forms.Form):
+    username = forms.CharField(label='用户名', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'id': 'username',
+        'placeholder': '请输入您的用户名',
+    }))
+    email = forms.EmailField(label='用户邮箱', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'id': 'email',
+        'placeholder': '请输入您注册时的邮箱',
+    }))
+
+    # 验证用户名是否存在
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        users = User.objects.filter(username=username)
+
+        if users.count() == 0:
+            raise ValidationError('用户名不存在')
+        return username
+
+    # 验证邮箱是否存在
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        users = User.objects.filter(email=email)
+
+        if users.count() == 0:
+            raise ValidationError('该邮箱没有被注册,请重新填写')
+        return email
 
 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, ForgetPasswordForm
+from .forms import RegisterForm, ForgetPasswordForm, EmailCodeForm
 from .models import User, User_ex
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
@@ -7,9 +7,11 @@ from django.contrib.auth.hashers import make_password
 # Create your views here.
 from itsdangerous import URLSafeTimedSerializer as utsr
 import base64
+import random, string
 import re
 from django.conf import settings as django_settings
 from django.core.mail import send_mail
+from django.utils import timezone
 
 
 class Token:
@@ -97,7 +99,7 @@ def user_activate(request, token):
 def forget_password(request):
     data = {}
     data['form_title'] = '重置密码'
-    data['submit_name'] = '提交'
+    data['submit_name'] = '重置密码'
 
     if request.method == 'POST':
         # 表单提交
@@ -108,12 +110,13 @@ def forget_password(request):
             email = form.cleaned_data['email']
             pwd = form.cleaned_data['pwd_2']
             username = form.cleaned_data['username']
+            check_code = form.cleaned_data['check_code']
             user = User.objects.get(email=email, username=username)
             user.set_password(pwd)
             user.save()
 
             # 删除验证码
-            ex = User_ex.objects.filter(user=user)
+            ex = User_ex.objects.filter(vaild_code=check_code)
             if ex.count() > 0:
                 ex.delete()
 
@@ -132,3 +135,54 @@ def forget_password(request):
         form = ForgetPasswordForm()
     data['form'] = form
     return render(request, 'password_reset_form.html', data)
+
+
+def get_email_code(request):
+    data = {}
+    data['form_title'] = '重置密码'
+    data['submit_name'] = '获取验证码'
+
+    if request.method == 'POST':
+        # 表单提交
+        form = EmailCodeForm(request.POST)
+
+        # 验证是否合法
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            username = form.cleaned_data['username']
+            # string.digits生成0-9数字字符串, string.ascii_letters生成a-Z所有字母的字符串
+            # 随机获取六位数的验证码
+            code = ''.join(random.sample(string.digits + string.ascii_letters, 6))
+            # 检测短时间内是否生成过验证码
+            users = User.objects.filter(email=email, username=username)
+            user_ex = User_ex.objects.filter(user_id=users[0].id)
+            if user_ex.count() > 0:
+                user_ex = user_ex[0]
+
+                create_time = user_ex.vaild_time
+                td = timezone.now() - create_time
+                if td.seconds < 60:
+                    data['message'] = '一分钟之内重复获取验证码'
+                    raise Exception(data['message'])
+            else:
+                # 没有验证码则新建一个
+                user_ex = User_ex(user=users[0])
+                # 将生成的code写入数据库
+                user_ex.vaild_code = code
+                user_ex.vaild_time = timezone.now()
+                user_ex.save()
+
+                message = "\n".join([u'{0},修改密码的验证码为{1}'.format(username, code)])
+                send_mail(u'修改密码验证码', message, '535719197@qq.com', [email], fail_silently=False)
+                return render(request, 'message.html', {'message': u"请登录到注册邮箱中查看验证码，有效期为1个小时"})
+
+            # 页面提示
+            data['goto_url'] = reversed('user_info')
+            data['goto_time'] = 3000
+            data['goto_page'] = True
+            data['message'] = '获取验证码成功'
+            return render(request, 'message.html', data)
+    else:
+        form = EmailCodeForm()
+    data['form'] = form
+    return render(request, 'send_email.html', data)

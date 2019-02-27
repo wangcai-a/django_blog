@@ -15,7 +15,7 @@ class User(AbstractUser):
 # 用户验证
 class User_ex(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    vaild_code = models.IntegerField()
+    vaild_code = models.CharField(max_length=6)
     vaild_time = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
