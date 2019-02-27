@@ -11,6 +11,7 @@ fabric==2.4.0
 Fabric3==1.14.post1
 idna==2.8
 invoke==1.2.0
+itsdangerous==1.1.0
 Jinja2==2.10
 Markdown==3.0.1
 MarkupSafe==1.1.0
