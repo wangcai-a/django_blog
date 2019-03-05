@@ -34,10 +34,11 @@ def blog_detail(request, id):
 
     # 获取这篇文字的评论
     ct = ContentType.objects.get_for_model(Blog)
-    comment_list = Comment.objects.filter(content_type=ct, object_id=id)
+    comment_list = Comment.objects.filter(content_type=ct, object_id=id, root=None)
     form_data = {
         'content_type': ct.model,
         'object_id':  id,
+        'reply_comment_id': 0,
     }
     comment_form = CommentForm(initial=form_data)
 
@@ -85,6 +86,6 @@ def get_list_detail(request, blogs):
         'blogs': contacts,
         'blogs_count': Blog.objects.filter(is_deleted=False).count(),
         'blog_types': BlogType.objects.all(),
-        'now_page': int(page)
+        'now_page': int(page),
     }
     return context

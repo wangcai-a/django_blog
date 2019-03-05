@@ -44,9 +44,17 @@
                         <span class="nickname">{{ comment.comment_user.username }}</span>
                         <time class="submit-date">({{ comment.created_time }})</time>
                         <div class="text">
-                          {{ comment.text|safe }}
+                          {{ comment.text|safe }}<a href="javascript:reply({{ comment.pk }})">回复</a>
                         </div>
+
                         </li>
+                        <div class="reply">
+                            {% for reply in comment.reply_root.all %}
+                            {{ reply.comment_user.username }}({{ reply.created_time }})回复{{ reply.reply_to.username }}
+                            {{ reply.text|safe }}
+                                <a href="javascript:reply({{ reply.pk }})">回复</a>
+                            {% endfor %}
+                        </div>
                       {% empty %}
                       暂无评论
                       {% endfor %}
@@ -144,6 +152,13 @@
             });
 
         })
+
+        function reply(reply_comment_id) {
+          $('#reply_comment_id').val(reply_comment_id);
+          $('html').animate({scrollTop: $('#comment_form').offset().top - 60}, 300, function () {
+              CKEDITOR.instances['id_text'].focus();
+          })
+        }
     </script>
 {% endblock %}
 

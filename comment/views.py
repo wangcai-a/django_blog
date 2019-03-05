@@ -17,7 +17,14 @@ def blog_comment(request):
         text = comment_form.cleaned_data['comment']
         object_id = comment_form.cleaned_data['object_id']
         ct = ContentType.objects.get(model=content_type)
-        comment_data = Comment(content_type=ct, object_id=object_id, text=text, comment_user=comment_user)
+        comment_data = Comment(content_type=ct, object_id=object_id, text=text,
+                               comment_user=comment_user)
+        parent = comment_form.cleaned_data['parent']
+        if not parent is None:
+            comment_data.root = parent.root if not parent.root is None else parent
+            comment_data.parent = parent
+            comment_data.reply_to_id = parent.reply_to
+
         comment_data.save()
         data = {
             'status': 'success',
@@ -25,6 +32,11 @@ def blog_comment(request):
             'comment_time': comment_data.created_time.strftime('%Y-%m-%d %H:%M:%S'),
             'comment': comment_data.text,
         }
+        if not parent is None:
+            data['reply_to'] = comment_data.reply_to
+        else:
+            data['reply_to'] = ''
+        data['pk'] = comment_data.pk
     else:
         data = {
             'status': 'error',

@@ -22,3 +22,7 @@ div.django-ckeditor-widget {
 div#comment{
     padding: 0;
 }
+
+div.reply{
+    margin-left: 2em;
+}
