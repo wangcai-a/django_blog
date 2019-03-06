@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.http import JsonResponse
-from .models import Comment, ContentType
+from .models import Comment, ContentType, User
 from .forms import CommentForm
 
 # Create your views here.
@@ -20,10 +20,10 @@ def blog_comment(request):
         comment_data = Comment(content_type=ct, object_id=object_id, text=text,
                                comment_user=comment_user)
         parent = comment_form.cleaned_data['parent']
-        if not parent is None:
-            comment_data.root = parent.root if not parent.root is None else parent
+        if parent is not None:
+            comment_data.root = parent.root if parent.root is not None else parent
             comment_data.parent = parent
-            comment_data.reply_to_id = parent.reply_to
+            comment_data.reply_to = parent.comment_user
 
         comment_data.save()
         data = {
@@ -32,8 +32,8 @@ def blog_comment(request):
             'comment_time': comment_data.created_time.strftime('%Y-%m-%d %H:%M:%S'),
             'comment': comment_data.text,
         }
-        if not parent is None:
-            data['reply_to'] = comment_data.reply_to
+        if  parent is not None:
+            data['reply_to'] = comment_data.reply_to.username
         else:
             data['reply_to'] = ''
         data['pk'] = comment_data.pk
