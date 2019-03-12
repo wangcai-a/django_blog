@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load comments_count %}
 {% block header %}
     <link rel="stylesheet" href="{% static 'blog.css' %}">
 {% endblock %}
@@ -27,6 +28,7 @@
                         <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-user" aria-hidden="true">{{ blog.author }}</p>
                         <p class="blog-info glyphicon glyphicon-eye-open">({{ blog.get_read_num }})</p>
                         <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-time">{{ blog.created_time|date:"Y-m-d H:i:s" }}</p>
+                        <p class="glyphicon glyphicon-pencil">{% comments_count blog %}</p>
                         <p>{{ blog.content|truncatewords:30 }}</p>
                     </div>
                 {% empty %}

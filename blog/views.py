@@ -34,7 +34,7 @@ def blog_detail(request, id):
 
     # 获取这篇文字的评论
     ct = ContentType.objects.get_for_model(Blog)
-    comment_list = Comment.objects.filter(content_type=ct, object_id=id, root=None)
+    comment_list = Comment.objects.filter(content_type=ct, object_id=id, parent=None)
     form_data = {
         'content_type': ct.model,
         'object_id':  id,

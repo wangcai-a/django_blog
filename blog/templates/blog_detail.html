@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% load static %}
+{% load comments_count %}
 {% block header %}
     <link rel="stylesheet" href="{% static 'blog.css' %}">
     <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
@@ -29,6 +30,7 @@
                     <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-user" aria-hidden="true">{{ blog.author }}</p>
                     <p class="blog-info glyphicon glyphicon-eye-open">({{ blog.get_read_num }})</p>
                     <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-time">{{ blog.created_time|date:"Y-m-d H:i:s" }}</p>
+                    <p class="glyphicon glyphicon-pencil">{% comments_count blog %}</p>
                     <!--增加safe过滤器,表示不需要转义,直接显示原始内容-->
                     <p>{{ blog.content | safe }} </p>
                 </div>
