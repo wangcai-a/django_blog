@@ -6,6 +6,7 @@
 
 {% load static %}
 {% load comments_count %}
+{% load likes_tags %}
 {% block header %}
     <link rel="stylesheet" href="{% static 'blog.css' %}">
     <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
@@ -32,7 +33,12 @@
                     <p class="blog-info glyphicon glyphicon-userglyphicon glyphicon-time">{{ blog.created_time|date:"Y-m-d H:i:s" }}</p>
                     <p class="glyphicon glyphicon-pencil">{% comments_count blog %}</p>
                     <!--增加safe过滤器,表示不需要转义,直接显示原始内容-->
-                    <p>{{ blog.content | safe }} </p>
+                    <div class="blog-content">{{ blog.content | safe }} </div>
+                    <div class="like" onclick="likeChange(this, 'blog', {{ blog.pk }})">
+                        <span class="glyphicon glyphicon-thumbs-up {% get_likes_status blog %}"></span>
+                        <span class="liked-num">{% get_likes_count blog %}</span>
+                        <span>喜欢</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,6 +166,41 @@
           $('html').animate({scrollTop: $('#comment_form').offset().top - 60}, 300, function () {
               CKEDITOR.instances['id_text'].focus();
           })
+        }
+        
+        function likeChange(obj, content_type, object_id) {
+            var is_like = obj.getElementsByClassName('active').length == 0
+            $.ajax({
+                url: '{% url 'likes:like_change' %}',
+                type:'GET',
+                data: {
+                    content_type: content_type,
+                    object_id: object_id,
+                    is_like: is_like
+                },
+                cache: false,
+                success:function (data) {
+                    console.log(data)
+                    if (data['status'] == 'success'){
+                        // 更新点赞状态
+                        var element = $(obj.getElementsByClassName('glyphicon'))
+                        if(is_like){
+                            element.addClass('active')
+                        }else{
+                            element.removeClass('active')
+                        }
+                        // 更新点赞数
+                        var like_num = $(obj.getElementsByClassName('liked_num'))
+                        like_num.text(data['like_num'])
+                    }else{
+                        alert(data['message'])
+                    }
+
+                },
+                error: function (xhr) {
+                    console.log(xhr)
+                }
+            })
         }
     </script>
 {% endblock %}

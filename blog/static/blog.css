@@ -26,3 +26,18 @@ div#comment{
 div.reply{
     margin-left: 2em;
 }
+
+div.blog-content{
+    margin: 2em;
+}
+
+div.like{
+    color: #337ab7;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.5em 0.3em;
+}
+
+div.like .active{
+    color: #f22;
+}
